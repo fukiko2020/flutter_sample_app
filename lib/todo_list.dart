@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_app/todo_add.dart';
 import 'package:flutter_sample_app/todo_detail.dart';
 
 // 一覧ページ用ウィジェット
@@ -37,10 +38,18 @@ class TodoListPageState extends State {
         });
     }
 
-    void toDetailPage() {
+    void toDetailPage(int index) {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
-                return const TodoDetailPage();
+                return TodoDetailPage(todoItem: todoList[index]);
+            }),
+        );
+    }
+
+    void toAddPage() {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) {
+                return const TodoAddPage();
             }),
         );
     }
@@ -62,14 +71,15 @@ class TodoListPageState extends State {
                                         todoList[index]['isCompleted']
                                         ? 'true' : 'false'
                                     }'
-                                )
+                                ),
+                                onTap: () => { toDetailPage(index)},
                             ),
                         );
                     },
                 ),
             ),
             floatingActionButton: FloatingActionButton(
-                onPressed: toDetailPage,
+                onPressed: toAddPage,
                 child: const Icon(Icons.add),
             ),
             bottomNavigationBar: BottomNavigationBar(
