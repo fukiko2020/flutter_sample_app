@@ -15,16 +15,19 @@ class TodoListPageState extends State {
     int bottomBarIndex = 0;  // 選択されたタブを管理するための変数
     List<Map> todoList = [
         {
+            'id': 0,
             'title': 'Flutter',
             'content': 'Flutter を勉強する',
             'isCompleted': false,
         },
         {
+            'id': 1,
             'title': '買い物',
             'content': '卵を買う',
             'isCompleted': false,
         },
         {
+            'id': 2,
             'title': '課題',
             'content': '月 3 レポート',
             'isCompleted': true,
@@ -38,10 +41,19 @@ class TodoListPageState extends State {
         });
     }
 
+    void toggleIsCompleted(int index) {
+        setState(() {
+            todoList[index]['isCompleted'] = !todoList[index]['isCompleted'];
+        });
+    }
+
     void toDetailPage(int index) {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
-                return TodoDetailPage(todoItem: todoList[index]);
+                return TodoDetailPage(
+                    todoItem: todoList[index],
+                    toggleIsCompleted: toggleIsCompleted,
+                );
             }),
         );
     }
