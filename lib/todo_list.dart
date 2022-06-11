@@ -11,9 +11,9 @@ class TodoListPage extends StatefulWidget {
 }
 
 class TodoListPageState extends State {
-    final List<String> showType = ['未完了', '完了'];  // タブの名前を表示するための配列
+    bool showIsCompletedList = false;  // 現在のタブは未完了リストか完了リストか
     int bottomBarIndex = 0;  // 選択されたタブを管理するための変数
-    List<Map> todoList = [
+    List<Map> unCompletedList = [
         {
             'id': 0,
             'title': 'Flutter',
@@ -26,6 +26,8 @@ class TodoListPageState extends State {
             'content': '卵を買う',
             'isCompleted': false,
         },
+    ];
+    List<Map> completedList = [
         {
             'id': 2,
             'title': '課題',
@@ -33,17 +35,35 @@ class TodoListPageState extends State {
             'isCompleted': true,
         },
     ];
+    List<Map> shownList = [];
+
+    @override
+    void initState() {
+        super.initState();
+        shownList = unCompletedList;
+    }
 
     // ボトムバーがタップされたら setState を実行
     void onBottomBarTapped(int index) {
         setState(() {
             bottomBarIndex = index;
+            shownList = shownList == completedList
+                        ? unCompletedList
+                        : completedList;
         });
     }
 
     void toggleIsCompleted(int index) {
+        bool prevIsCompleted = shownList[index]['isCompleted'];
         setState(() {
-            todoList[index]['isCompleted'] = !todoList[index]['isCompleted'];
+            shownList[index]['isCompleted'] = !shownList[index]['isCompleted'];
+            if (prevIsCompleted) {  // toggle 前が完了済みなら未完了リストに追加、完了リストから削除
+                unCompletedList.add(shownList[index]);
+                completedList.removeAt(index);
+            } else {  // toggle 前が未完了なら完了リストに追加、未完了リストから削除
+                completedList.add(shownList[index]);
+                unCompletedList.removeAt(index);
+            }
         });
     }
 
@@ -51,7 +71,8 @@ class TodoListPageState extends State {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
                 return TodoDetailPage(
-                    todoItem: todoList[index],
+                    index: index,
+                    todoItem: shownList[index],
                     toggleIsCompleted: toggleIsCompleted,
                 );
             }),
@@ -74,17 +95,25 @@ class TodoListPageState extends State {
             ),
             body: Center(
                 child: ListView.builder(
-                    itemCount: todoList.length,
+                    itemCount: shownList.length,
                     itemBuilder: (context, index) {
                         return Card(
                             child: ListTile(
                                 title: Text(
-                                    '${index + 1}  ${todoList[index]['title']} ${
-                                        todoList[index]['isCompleted']
+                                    '${index + 1}  ${shownList[index]['title']} ${
+                                        shownList[index]['isCompleted']
                                         ? 'true' : 'false'
                                     }'
                                 ),
-                                onTap: () => { toDetailPage(index)},
+                                trailing: Checkbox(
+                                    activeColor: Colors.green,
+                                    checkColor: Colors.white,
+                                    onChanged: (value) {
+                                        toggleIsCompleted(index);
+                                    },
+                                    value: shownList[index]['isCompleted'],
+                                ),
+                                onTap: () => {toDetailPage(index)},
                             ),
                         );
                     },
@@ -107,7 +136,7 @@ class TodoListPageState extends State {
                 ],
                 onTap: onBottomBarTapped,
                 currentIndex: bottomBarIndex,
-                selectedItemColor: Colors.blue.shade900,
+                selectedItemColor: Colors.blue,
             )
         );
     }

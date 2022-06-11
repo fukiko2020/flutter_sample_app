@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class TodoDetailPage extends StatefulWidget {
     const TodoDetailPage({
         Key? key,
+        required this.index,
         required this.todoItem,
         required this.toggleIsCompleted,
     }) : super(key: key);
 
+    final int index;
     final Map todoItem;
     final Function(int) toggleIsCompleted;
 
@@ -43,7 +45,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                     Text(widget.todoItem['content']),
                     ElevatedButton(
                         onPressed: () {
-                            widget.toggleIsCompleted(widget.todoItem['id']);
+                            widget.toggleIsCompleted(widget.index);
                             setCurrentIsCompleted();
                         },
                         child: currentIsCompleted
