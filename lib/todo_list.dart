@@ -67,11 +67,16 @@ class TodoListPageState extends State {
         });
     }
 
-    // void setShownList(int index) {
-    //     setState(() {
-    //       shownList =
-    //     });
-    // }
+    void addTodoItem(Map<String, String> formValue) {
+        setState(() {
+            unCompletedList.add({
+                'id': unCompletedList.length + completedList.length,
+                'title': formValue['title'],
+                'content': formValue['content'],
+                'isCompleted': false,
+            });
+        });
+    }
 
     void toDetailPage(int index) {
         Navigator.of(context).push(
@@ -89,7 +94,7 @@ class TodoListPageState extends State {
     void toAddPage() {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
-                return const TodoAddPage();
+                return TodoAddPage(addTodoItem: addTodoItem);
             }),
         );
     }
