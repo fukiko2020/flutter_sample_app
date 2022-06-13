@@ -22,67 +22,72 @@ class TodoAddPageState extends State<TodoAddPage> {
             body: Form(
                 key: formKey,
                 child: Center(
-                    child: Container(
-                        width: 300,
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                                Container(
-                                    margin: const EdgeInsets.only(bottom: 32.0),
-                                    padding: const EdgeInsets.all(4.0),
-                                    width: 300,
-                                    child: TextFormField(
-                                        decoration: const InputDecoration(
-                                            labelText: 'タイトル',
-                                        ),
-                                        onSaved: (value) {
-                                            formValue['title']
-                                            = value.toString();
-                                        },
-                                        validator: (value) {
-                                            return (
-                                                value != null
-                                                && value.length <= 30)
-                                                ? 'タイトルは30文字以内で入力してください。'
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 32.0),
+                                padding: const EdgeInsets.all(4.0),
+                                width: 300,
+                                child: TextFormField(
+                                    decoration: const InputDecoration(
+                                        labelText: 'タイトル',
+                                    ),
+                                    onSaved: (value) {
+                                        formValue['title']
+                                        = value.toString();
+                                    },
+                                    validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                            return 'タイトルを入力してください。';
+                                        } else if (value.length > 30) {
+                                            return 'タイトルは30文字以内で入力してください。';
+                                        }
+                                        return null;
+                                    },
+                                ),
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 32.0),
+                                padding: const EdgeInsets.all(4.0),
+                                width: 300,
+                                height: 200,
+                                child: TextFormField(
+                                    decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: '内容',
+                                        // labelTextを上寄せにする
+                                        alignLabelWithHint: true,
+                                    ),
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    minLines: 8,
+                                    onSaved: (value) {
+                                        formValue['content']
+                                        = value.toString();
+                                    },
+                                    validator: (value) {
+                                        return value == null || value.isEmpty
+                                                ? '内容を入力してください。'
                                                 : null;
-                                        },
-                                    ),
+                                    },
                                 ),
-                                Container(
-                                    margin: const EdgeInsets.only(bottom: 32.0),
-                                    padding: const EdgeInsets.all(4.0),
-                                    width: 300,
-                                    height: 200,
-                                    child: TextFormField(
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: '内容',
-                                            // labelTextを上寄せにする
-                                            alignLabelWithHint: true,
-                                        ),
-                                        keyboardType: TextInputType.multiline,
-                                        maxLines: null,
-                                        minLines: 8,
-                                        onSaved: (value) {
-                                            formValue['content']
-                                            = value.toString();
-                                        },
-                                    ),
-                                ),
-                                SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: ElevatedButton(
-                                        onPressed: () {
+                            ),
+                            SizedBox(
+                                width: 300,
+                                height: 40,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                        if (formKey.currentState!.validate()) {
                                             formKey.currentState?.save();
                                             widget.addTodoItem(formValue);
                                             Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Todo を追加'),
-                                    ),
+                                        }
+                                    },
+                                    child: const Text('Todo を追加'),
                                 ),
-                            ],
-                        ),
+                            ),
+                        ],
                     ),
                 ),
             )

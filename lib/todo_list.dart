@@ -112,10 +112,7 @@ class TodoListPageState extends State {
                         return Card(
                             child: ListTile(
                                 title: Text(
-                                    '${index + 1}  ${shownList[index]['title']} ${
-                                        shownList[index]['isCompleted']
-                                        ? 'true' : 'false'
-                                    }'
+                                    '${index + 1}  ${shownList[index]['title']}'
                                 ),
                                 trailing: Checkbox(
                                     activeColor: Colors.green,
