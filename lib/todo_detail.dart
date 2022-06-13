@@ -24,7 +24,6 @@ class TodoDetailPageState extends State<TodoDetailPage> {
     @override
     void initState() {
         super.initState();
-        print('currentIsCompleted: ${widget.todoItem['isCompleted']}');
         currentIsCompleted = widget.todoItem['isCompleted'];
     }
 
@@ -35,10 +34,8 @@ class TodoDetailPageState extends State<TodoDetailPage> {
     }
 
     void backToTodoList(int index) {
-        print('tappedIndex: $index');
         widget.changeShownList(index);
         Navigator.of(context).pop();
-        // 新しいTodoListPageを作った方が、未完了/完了を更新した場合に正常な一覧ページが表示される
     }
 
     @override
