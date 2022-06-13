@@ -5,11 +5,13 @@ class TodoDetailPage extends StatefulWidget {
         Key? key,
         required this.index,
         required this.todoItem,
+        required this.changeShownList,
         required this.toggleIsCompleted,
     }) : super(key: key);
 
     final int index;
     final Map todoItem;
+    final Function(int) changeShownList;
     final Function(int) toggleIsCompleted;
 
     @override
@@ -22,6 +24,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
     @override
     void initState() {
         super.initState();
+        print('currentIsCompleted: ${widget.todoItem['isCompleted']}');
         currentIsCompleted = widget.todoItem['isCompleted'];
     }
 
@@ -31,28 +34,75 @@ class TodoDetailPageState extends State<TodoDetailPage> {
         });
     }
 
+    void backToTodoList(int index) {
+        print('tappedIndex: $index');
+        widget.changeShownList(index);
+        Navigator.of(context).pop();
+        // 新しいTodoListPageを作った方が、未完了/完了を更新した場合に正常な一覧ページが表示される
+    }
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Todo 詳細'),
             ),
-            body: Column(
-                children: <Widget>[
-                    const Text('タイトル'),
-                    Text('${widget.todoItem['title']}'),
-                    const Text('内容'),
-                    Text(widget.todoItem['content']),
-                    ElevatedButton(
-                        onPressed: () {
-                            widget.toggleIsCompleted(widget.index);
-                            setCurrentIsCompleted();
-                        },
-                        child: currentIsCompleted
-                        ? const Text('未完了にする')
-                        : const Text('完了にする'),
+            body: Center(
+                child: Container(
+                    width: 300,
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                            Container(
+                                alignment: Alignment.centerLeft,
+                                margin: const EdgeInsets.only(bottom: 4.0),
+                                // width: 100.0,
+                                child: const Text('タイトル'),
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 32.0),
+                                padding: const EdgeInsets.all(4.0),
+                                width: 300,
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(width: 1.0),
+                                    ),
+                                ),
+                                child: Text('${widget.todoItem['title']}'),
+                            ),
+                            Container(
+                                alignment: Alignment.centerLeft,
+                                margin: const EdgeInsets.only(bottom: 8.0),
+                                // width: 100.0,
+                                child: const Text('内容'),
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 32.0),
+                                padding: const EdgeInsets.all(4.0),
+                                width: 300,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(widget.todoItem['content']),
+                            ),
+                            SizedBox(
+                                width: 300,
+                                height: 40,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                        widget.toggleIsCompleted(widget.index);
+                                        setCurrentIsCompleted();
+                                    },
+                                    child: currentIsCompleted
+                                    ? const Text('未完了にする')
+                                    : const Text('完了にする'),
+                                ),
+                            ),
+                        ],
                     ),
-                ],
+                ),
             ),
             bottomNavigationBar: BottomNavigationBar(
                 items: const <BottomNavigationBarItem>[
@@ -65,7 +115,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                         label: '完了',
                     ),
                 ],
-                // onTap: _onBottomBarTapped,
+                onTap: backToTodoList,
             ),
         );
     }

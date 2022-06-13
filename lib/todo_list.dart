@@ -44,10 +44,10 @@ class TodoListPageState extends State {
     }
 
     // ボトムバーがタップされたら setState を実行
-    void onBottomBarTapped(int index) {
+    void changeShownList(int index) {
         setState(() {
             bottomBarIndex = index;
-            shownList = shownList == completedList
+            shownList = bottomBarIndex == 0
                         ? unCompletedList
                         : completedList;
         });
@@ -67,12 +67,19 @@ class TodoListPageState extends State {
         });
     }
 
+    // void setShownList(int index) {
+    //     setState(() {
+    //       shownList =
+    //     });
+    // }
+
     void toDetailPage(int index) {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
                 return TodoDetailPage(
                     index: index,
                     todoItem: shownList[index],
+                    changeShownList: changeShownList,
                     toggleIsCompleted: toggleIsCompleted,
                 );
             }),
@@ -134,7 +141,7 @@ class TodoListPageState extends State {
                         label: '完了',
                     ),
                 ],
-                onTap: onBottomBarTapped,
+                onTap: changeShownList,
                 currentIndex: bottomBarIndex,
                 selectedItemColor: Colors.blue,
             )
