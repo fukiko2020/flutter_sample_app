@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_app/todo_item.dart';
 
 class TodoDetailPage extends StatefulWidget {
     const TodoDetailPage({
@@ -10,7 +11,7 @@ class TodoDetailPage extends StatefulWidget {
     }) : super(key: key);
 
     final int index;
-    final Map todoItem;
+    final TodoItem todoItem;
     final Function(int) changeShownList;
     final Function(int) toggleIsCompleted;
 
@@ -24,7 +25,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
     @override
     void initState() {
         super.initState();
-        currentIsCompleted = widget.todoItem['isCompleted'];
+        currentIsCompleted = widget.todoItem.isCompleted;
     }
 
     void setCurrentIsCompleted() {
@@ -65,12 +66,11 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                                         bottom: BorderSide(width: 1.0),
                                     ),
                                 ),
-                                child: Text('${widget.todoItem['title']}'),
+                                child: Text(widget.todoItem.title),
                             ),
                             Container(
                                 alignment: Alignment.centerLeft,
                                 margin: const EdgeInsets.only(bottom: 8.0),
-                                // width: 100.0,
                                 child: const Text('内容'),
                             ),
                             Container(
@@ -82,7 +82,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                                     border: Border.all(width: 1),
                                     borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: Text(widget.todoItem['content']),
+                                child: Text(widget.todoItem.content),
                             ),
                             SizedBox(
                                 width: 300,

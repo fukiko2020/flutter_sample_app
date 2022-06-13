@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/todo_add.dart';
 import 'package:flutter_sample_app/todo_detail.dart';
+import 'package:flutter_sample_app/todo_item.dart';
 
 // 一覧ページ用ウィジェット
 class TodoListPage extends StatefulWidget {
@@ -13,29 +14,31 @@ class TodoListPage extends StatefulWidget {
 class TodoListPageState extends State {
     bool showIsCompletedList = false;  // 現在のタブは未完了リストか完了リストか
     int bottomBarIndex = 0;  // 選択されたタブを管理するための変数
-    List<Map> unCompletedList = [
-        {
-            'id': 0,
-            'title': 'Flutter',
-            'content': 'Flutter を勉強する',
-            'isCompleted': false,
-        },
-        {
-            'id': 1,
-            'title': '買い物',
-            'content': '卵を買う',
-            'isCompleted': false,
-        },
+    List<TodoItem> unCompletedList = [
+        TodoItem(
+            id: 0,
+            title: 'Flutter',
+            content: 'Flutter を勉強する',
+            isCompleted: false,
+        ),
+        TodoItem(
+            id: 1,
+            title: '買い物',
+            content: '卵を買う',
+            isCompleted: false,
+        ),
     ];
-    List<Map> completedList = [
-        {
-            'id': 2,
-            'title': '課題',
-            'content': '月 3 レポート',
-            'isCompleted': true,
-        },
+
+    List<TodoItem> completedList = [
+        TodoItem(
+            id: 2,
+            title: '課題',
+            content: '月 3 レポート',
+            isCompleted: true,
+        ),
     ];
-    List<Map> shownList = [];
+
+    List<TodoItem> shownList = [];
 
     @override
     void initState() {
@@ -54,9 +57,9 @@ class TodoListPageState extends State {
     }
 
     void toggleIsCompleted(int index) {
-        bool prevIsCompleted = shownList[index]['isCompleted'];
+        final prevIsCompleted = shownList[index].isCompleted;
         setState(() {
-            shownList[index]['isCompleted'] = !shownList[index]['isCompleted'];
+            shownList[index].isCompleted = !shownList[index].isCompleted;
             if (prevIsCompleted) {  // toggle 前が完了済みなら未完了リストに追加、完了リストから削除
                 unCompletedList.add(shownList[index]);
                 completedList.removeAt(index);
@@ -69,12 +72,13 @@ class TodoListPageState extends State {
 
     void addTodoItem(Map<String, String> formValue) {
         setState(() {
-            unCompletedList.add({
-                'id': unCompletedList.length + completedList.length,
-                'title': formValue['title'],
-                'content': formValue['content'],
-                'isCompleted': false,
-            });
+            unCompletedList.add(
+                TodoItem(
+                    id: unCompletedList.length + completedList.length,
+                    title: formValue['title']!,
+                    content: formValue['content']!,
+                    isCompleted: false,
+            ));
         });
     }
 
@@ -103,7 +107,7 @@ class TodoListPageState extends State {
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
-                title: const Text('ToDo 一覧'),
+                title: Text('ToDo 一覧（完了済み ${completedList.length} / ${unCompletedList.length + completedList.length}）'),
             ),
             body: Center(
                 child: ListView.builder(
@@ -112,7 +116,7 @@ class TodoListPageState extends State {
                         return Card(
                             child: ListTile(
                                 title: Text(
-                                    '${index + 1}  ${shownList[index]['title']}'
+                                    '${index + 1}  ${shownList[index].title}'
                                 ),
                                 trailing: Checkbox(
                                     activeColor: Colors.green,
@@ -120,7 +124,7 @@ class TodoListPageState extends State {
                                     onChanged: (value) {
                                         toggleIsCompleted(index);
                                     },
-                                    value: shownList[index]['isCompleted'],
+                                    value: shownList[index].isCompleted,
                                 ),
                                 onTap: () => {toDetailPage(index)},
                             ),
