@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/todo_item.dart';
 
 class TodoDetailPage extends StatefulWidget {
+  final int index;
+  final TodoItem todoItem;
+  final Function(int) toggleIsCompleted;
+
   const TodoDetailPage({
     Key? key,
     required this.index,
     required this.todoItem,
-    required this.changeShownList,
     required this.toggleIsCompleted,
   }) : super(key: key);
-
-  final int index;
-  final TodoItem todoItem;
-  final Function(int) changeShownList;
-  final Function(int) toggleIsCompleted;
 
   @override
   TodoDetailPageState createState() => TodoDetailPageState();
@@ -34,11 +32,6 @@ class TodoDetailPageState extends State<TodoDetailPage> {
         currentIsCompleted = !currentIsCompleted;
       },
     );
-  }
-
-  void backToTodoList(int index) {
-    widget.changeShownList(index);
-    Navigator.of(context).pop();
   }
 
   @override
@@ -96,19 +89,6 @@ class TodoDetailPageState extends State<TodoDetailPage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.unpublished),
-            label: '未完了',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle),
-            label: '完了',
-          ),
-        ],
-        onTap: backToTodoList,
       ),
     );
   }

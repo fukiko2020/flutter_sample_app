@@ -95,7 +95,6 @@ class TodoListPageState extends State {
         return TodoDetailPage(
           index: index,
           todoItem: shownList[index],
-          changeShownList: changeShownList,
           toggleIsCompleted: toggleIsCompleted,
         );
       }),

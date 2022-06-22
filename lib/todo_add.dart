@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TodoAddPage extends StatefulWidget {
-  const TodoAddPage({Key? key, required this.addTodoItem}) : super(key: key);
-
   final void Function(Map<String, String>) addTodoItem;
+
+  const TodoAddPage({Key? key, required this.addTodoItem}) : super(key: key);
 
   @override
   TodoAddPageState createState() => TodoAddPageState();
