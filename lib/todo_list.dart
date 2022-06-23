@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sample_app/todo_add.dart';
 import 'package:flutter_sample_app/todo_detail.dart';
+// import 'package:flutter_sample_app/todo_add.dart';
+// import 'package:flutter_sample_app/todo_detail.dart';
 import 'package:flutter_sample_app/todo_item.dart';
 
 // 一覧ページ用ウィジェット
@@ -90,24 +91,16 @@ class TodoListPageState extends State {
   }
 
   void toDetailPage(int index) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) {
-        return TodoDetailPage(
-          index: index,
-          todoItem: shownList[index],
-          toggleIsCompleted: toggleIsCompleted,
-        );
-      }),
+    Navigator.of(context).pushNamed(
+      '/detail',
+      arguments: TodoDetailArguments(index, shownList[index], toggleIsCompleted)
     );
   }
 
   void toAddPage() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return TodoAddPage(addTodoItem: addTodoItem);
-        },
-      ),
+    Navigator.of(context).pushNamed(
+      '/add',
+      arguments: addTodoItem,
     );
   }
 

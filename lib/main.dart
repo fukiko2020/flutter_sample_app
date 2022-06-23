@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_app/todo_add.dart';
+import 'package:flutter_sample_app/todo_detail.dart';
 import 'package:flutter_sample_app/todo_list.dart';
 
 void main() {
@@ -15,7 +17,24 @@ class MyTodoApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const TodoListPage(),
+      // home: const TodoListPage(),
+      routes: {
+        '/': (context) => const TodoListPage(),
+        // '/detail': (context) => const TodoDetailPage(),
+        '/add': (context) => const TodoAddPage(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/detail') {
+          final args = settings.arguments as TodoDetailArguments;
+          return MaterialPageRoute(builder: (context) {
+            return TodoDetailPage(
+              index: args.index,
+              todoItem: args.todoItem,
+              toggleIsCompleted: args.toggleIsCompleted,
+            );
+          });
+        }
+      },
     );
   }
 }

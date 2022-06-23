@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/todo_item.dart';
 
+class TodoDetailArguments {
+  final int index;
+  final TodoItem todoItem;
+  final Function(int) toggleIsCompleted;
+
+  TodoDetailArguments(this.index, this.todoItem, this.toggleIsCompleted);
+}
+
 class TodoDetailPage extends StatefulWidget {
   final int index;
   final TodoItem todoItem;
@@ -36,6 +44,9 @@ class TodoDetailPageState extends State<TodoDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final args =
+    //     ModalRoute.of(context)!.settings.arguments as TodoDetailArguments;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo 詳細'),
@@ -57,7 +68,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                   margin: const EdgeInsets.all(12.0),
                   width: 300,
                   child: Text(widget.todoItem.title),
-                )
+                ),
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -71,7 +82,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                   width: 300,
                   height: 200,
                   child: Text(widget.todoItem.content),
-                )
+                ),
               ),
               SizedBox(
                 width: 300,

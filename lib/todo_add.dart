@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-class TodoAddPage extends StatefulWidget {
-  final void Function(Map<String, String>) addTodoItem;
+// class TodoAddArguments {
+//   final void Function(Map<String, String>) addTodoItem;
 
-  const TodoAddPage({Key? key, required this.addTodoItem}) : super(key: key);
+//   TodoAddArguments(this.addTodoItem);
+// }
+
+class TodoAddPage extends StatefulWidget {
+  // final void Function(Map<String, String>) addTodoItem;
+
+  const TodoAddPage({Key? key}) : super(key: key);
+  // const TodoAddPage({Key? key, required this.addTodoItem}) : super(key: key);
 
   @override
   TodoAddPageState createState() => TodoAddPageState();
@@ -15,6 +22,8 @@ class TodoAddPageState extends State<TodoAddPage> {
 
   @override
   Widget build(BuildContext context) {
+    final addTodoItem = ModalRoute.of(context)!.settings.arguments! as Function;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo 追加'),
@@ -78,7 +87,7 @@ class TodoAddPageState extends State<TodoAddPage> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       formKey.currentState?.save();
-                      widget.addTodoItem(formValue);
+                      addTodoItem(formValue);
                       Navigator.of(context).pop();
                     }
                   },
