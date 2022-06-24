@@ -17,10 +17,9 @@ class MyTodoApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const TodoListPage(),
+      initialRoute: '/',
       routes: {
         '/': (context) => const TodoListPage(),
-        // '/detail': (context) => const TodoDetailPage(),
         '/add': (context) => const TodoAddPage(),
       },
       onGenerateRoute: (settings) {

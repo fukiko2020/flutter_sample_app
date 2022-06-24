@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/todo_detail.dart';
-// import 'package:flutter_sample_app/todo_add.dart';
-// import 'package:flutter_sample_app/todo_detail.dart';
 import 'package:flutter_sample_app/todo_item.dart';
 
 // 一覧ページ用ウィジェット
@@ -13,9 +11,10 @@ class TodoListPage extends StatefulWidget {
 }
 
 class TodoListPageState extends State {
-  bool showIsCompletedList = false; // 現在のタブは未完了リストか完了リストか
   int bottomBarIndex = 0; // 選択されたタブを管理するための変数
-  List<TodoItem> unCompletedList = [
+  List<TodoItem> get shownList =>
+      bottomBarIndex == 0 ? _unCompletedList : _completedList;
+  final List<TodoItem> _unCompletedList = [
     TodoItem(
       id: 0,
       title: 'Flutter',
@@ -30,7 +29,7 @@ class TodoListPageState extends State {
     ),
   ];
 
-  List<TodoItem> completedList = [
+  final List<TodoItem> _completedList = [
     TodoItem(
       id: 2,
       title: '課題',
@@ -39,38 +38,25 @@ class TodoListPageState extends State {
     ),
   ];
 
-  List<TodoItem> shownList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    shownList = unCompletedList;
-  }
-
   // ボトムバーがタップされたら setState を実行
   void changeShownList(int index) {
     setState(
       () {
         bottomBarIndex = index;
-        shownList = bottomBarIndex == 0 ? unCompletedList : completedList;
       },
     );
   }
 
   void toggleIsCompleted(int index) {
-    final prevIsCompleted = shownList[index].isCompleted;
     setState(
       () {
-        shownList[index].isCompleted = !shownList[index].isCompleted;
-        if (prevIsCompleted) {
-          // toggle 前が完了済みなら未完了リストに追加、完了リストから削除
-          unCompletedList.add(shownList[index]);
-          completedList.removeAt(index);
-        } else {
-          // toggle 前が未完了なら完了リストに追加、未完了リストから削除
-          completedList.add(shownList[index]);
-          unCompletedList.removeAt(index);
-        }
+        final tappedItem = shownList[index];
+        final removeFrom =
+            tappedItem.isCompleted ? _completedList : _unCompletedList;
+        final addTo =
+            tappedItem.isCompleted ? _unCompletedList : _completedList;
+        addTo.add(tappedItem..toggleIsCompleted());
+        removeFrom.removeAt(index);
       },
     );
   }
@@ -78,9 +64,9 @@ class TodoListPageState extends State {
   void addTodoItem(Map<String, String> formValue) {
     setState(
       () {
-        unCompletedList.add(
+        _unCompletedList.add(
           TodoItem(
-            id: unCompletedList.length + completedList.length,
+            id: _unCompletedList.length + _completedList.length,
             title: formValue['title']!,
             content: formValue['content']!,
             isCompleted: false,
@@ -91,10 +77,9 @@ class TodoListPageState extends State {
   }
 
   void toDetailPage(int index) {
-    Navigator.of(context).pushNamed(
-      '/detail',
-      arguments: TodoDetailArguments(index, shownList[index], toggleIsCompleted)
-    );
+    Navigator.of(context).pushNamed('/detail',
+        arguments:
+            TodoDetailArguments(index, shownList[index], toggleIsCompleted));
   }
 
   void toAddPage() {
@@ -109,7 +94,7 @@ class TodoListPageState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'ToDo 一覧（完了済み ${completedList.length} / ${unCompletedList.length + completedList.length}）'),
+            'ToDo 一覧（完了済み ${_completedList.length} / ${_unCompletedList.length + _completedList.length}）'),
       ),
       body: Center(
         child: ListView.builder(
@@ -137,7 +122,7 @@ class TodoListPageState extends State {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.unpublished),
             label: '未完了',

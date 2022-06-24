@@ -44,8 +44,6 @@ class TodoDetailPageState extends State<TodoDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final args =
-    //     ModalRoute.of(context)!.settings.arguments as TodoDetailArguments;
 
     return Scaffold(
       appBar: AppBar(
