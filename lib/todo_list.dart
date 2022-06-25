@@ -39,7 +39,7 @@ class TodoListPageState extends State {
   ];
 
   // ボトムバーがタップされたら setState を実行
-  void changeShownList(int index) {
+  void changeBottomBarIndex(int index) {
     setState(
       () {
         bottomBarIndex = index;
@@ -77,9 +77,11 @@ class TodoListPageState extends State {
   }
 
   void toDetailPage(int index) {
-    Navigator.of(context).pushNamed('/detail',
-        arguments:
-            TodoDetailArguments(index, shownList[index], toggleIsCompleted));
+    Navigator.of(context).pushNamed(
+      '/detail',
+      arguments:
+          TodoDetailArguments(index, shownList[index], toggleIsCompleted)
+    );
   }
 
   void toAddPage() {
@@ -132,7 +134,7 @@ class TodoListPageState extends State {
             label: '完了',
           ),
         ],
-        onTap: changeShownList,
+        onTap: changeBottomBarIndex,
         currentIndex: bottomBarIndex,
         selectedItemColor: Colors.blue,
       ),

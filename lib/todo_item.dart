@@ -5,9 +5,10 @@ class TodoItem {
   bool isCompleted;
   void toggleIsCompleted() => isCompleted = !isCompleted;
 
-  TodoItem(
-      {required this.id,
+  TodoItem({
+      required this.id,
       required this.title,
       required this.content,
-      required this.isCompleted});
+      required this.isCompleted
+  });
 }
