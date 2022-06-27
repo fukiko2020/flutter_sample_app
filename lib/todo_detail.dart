@@ -4,21 +4,21 @@ import 'package:flutter_sample_app/todo_item.dart';
 class TodoDetailArguments {
   final int index;
   final TodoItem todoItem;
-  final Function(int) toggleIsCompleted;
+  final Function(int) replaceTodoItem;
 
-  TodoDetailArguments(this.index, this.todoItem, this.toggleIsCompleted);
+  TodoDetailArguments(this.index, this.todoItem, this.replaceTodoItem);
 }
 
 class TodoDetailPage extends StatefulWidget {
   final int index;
   final TodoItem todoItem;
-  final Function(int) toggleIsCompleted;
+  final Function(int) replaceTodoItem;
 
   const TodoDetailPage({
     Key? key,
     required this.index,
     required this.todoItem,
-    required this.toggleIsCompleted,
+    required this.replaceTodoItem,
   }) : super(key: key);
 
   @override
@@ -87,7 +87,7 @@ class TodoDetailPageState extends State<TodoDetailPage> {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () {
-                    widget.toggleIsCompleted(widget.index);
+                    widget.replaceTodoItem(widget.index);
                     setCurrentIsCompleted();
                   },
                   child: currentIsCompleted

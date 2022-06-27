@@ -29,7 +29,7 @@ class MyTodoApp extends StatelessWidget {
             return TodoDetailPage(
               index: args.index,
               todoItem: args.todoItem,
-              toggleIsCompleted: args.toggleIsCompleted,
+              replaceTodoItem: args.replaceTodoItem,
             );
           });
         }

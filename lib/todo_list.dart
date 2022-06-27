@@ -47,7 +47,7 @@ class TodoListPageState extends State {
     );
   }
 
-  void toggleIsCompleted(int index) {
+  void replaceTodoItem(int index) {
     setState(
       () {
         final tappedItem = shownList[index];
@@ -80,7 +80,7 @@ class TodoListPageState extends State {
     Navigator.of(context).pushNamed(
       '/detail',
       arguments:
-          TodoDetailArguments(index, shownList[index], toggleIsCompleted)
+          TodoDetailArguments(index, shownList[index], replaceTodoItem)
     );
   }
 
@@ -109,7 +109,7 @@ class TodoListPageState extends State {
                   activeColor: Colors.green,
                   checkColor: Colors.white,
                   onChanged: (value) {
-                    toggleIsCompleted(index);
+                    replaceTodoItem(index);
                   },
                   value: shownList[index].isCompleted,
                 ),
