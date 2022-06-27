@@ -1,50 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sample_app/todo_item.dart';
 
-class TodoDetailArguments {
-  final int index;
-  final TodoItem todoItem;
-  final Function(int) toggleIsCompleted;
+// class TodoDetailArguments {
+//   final int index;
+//   final TodoItem todoItem;
+//   final Function(int) toggleIsCompleted;
 
-  TodoDetailArguments(this.index, this.todoItem, this.toggleIsCompleted);
+//   TodoDetailArguments(this.index, this.todoItem, this.toggleIsCompleted);
+// }
+
+// class TodoDetailPage extends StatefulWidget {
+//   final int index;
+//   final TodoItem todoItem;
+//   final Function(int) toggleIsCompleted;
+
+//   const TodoDetailPage({
+//     Key? key,
+//     required this.index,
+//     required this.todoItem,
+//     required this.toggleIsCompleted,
+//   }) : super(key: key);
+
+//   @override
+//   TodoDetailPageState createState() => TodoDetailPageState();
+// }
+final isCompletedProvider = StateProvider<bool>((ref) => false);
+
+class TodoDetailPage extends ConsumerStatefulWidget {
+  const TodoDetailPage({Key? key}) : super(key: key);
+
+  @Override
+  ConsumerState<TodoDetailPage> createState() => _TodoDetailPageState();
 }
 
-class TodoDetailPage extends StatefulWidget {
-  final int index;
-  final TodoItem todoItem;
-  final Function(int) toggleIsCompleted;
+class _TodoDetailPageState extends ConsumerState<TodoDetailPage> {
+  const TodoDetailPage({Key? key}) : super(key: key);
 
-  const TodoDetailPage({
-    Key? key,
-    required this.index,
-    required this.todoItem,
-    required this.toggleIsCompleted,
-  }) : super(key: key);
-
-  @override
-  TodoDetailPageState createState() => TodoDetailPageState();
-}
-
-class TodoDetailPageState extends State<TodoDetailPage> {
-  bool currentIsCompleted = false;
+  bool _currentIsCompleted = false;
 
   @override
   void initState() {
     super.initState();
-    currentIsCompleted = widget.todoItem.isCompleted;
+    _currentIsCompleted = ref.read(todoItemProvider);
   }
 
-  void setCurrentIsCompleted() {
-    setState(
-      () {
-        currentIsCompleted = !currentIsCompleted;
-      },
-    );
-  }
+  // void setCurrentIsCompleted() {
+  //   setState(
+  //     () {
+  //       currentIsCompleted = !currentIsCompleted;
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo 詳細'),
@@ -85,14 +95,21 @@ class TodoDetailPageState extends State<TodoDetailPage> {
               SizedBox(
                 width: 300,
                 height: 40,
-                child: ElevatedButton(
-                  onPressed: () {
-                    widget.toggleIsCompleted(widget.index);
-                    setCurrentIsCompleted();
-                  },
-                  child: currentIsCompleted
-                      ? const Text('未完了にする')
-                      : const Text('完了にする'),
+                child: Consumer(
+                  // 子の中だけ再描画する
+                  builder: (context, ref, child) => ElevatedButton(
+                    onPressed: () {
+                      widget.toggleIsCompleted(widget.index);
+                      // setCurrentIsCompleted();
+                      ref
+                          .read(isCompletedProvider.state)
+                          .update((state) => !state);
+                    },
+                    // ここは再描画したいので watch() を使用
+                    child: ref.watch(isCompletedProvider)
+                        ? const Text('未完了にする')
+                        : const Text('完了にする'),
+                  ),
                 ),
               ),
             ],

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sample_app/todo_add.dart';
 import 'package:flutter_sample_app/todo_detail.dart';
 import 'package:flutter_sample_app/todo_list.dart';
 
 void main() {
-  runApp(const MyTodoApp());
+  runApp(
+    const ProviderScope(
+      child: MyTodoApp(),
+    ),
+  );
 }
 
 class MyTodoApp extends StatelessWidget {
@@ -20,20 +25,23 @@ class MyTodoApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const TodoListPage(),
+        '/detail': (context) => const TodoDetailPage(),
         '/add': (context) => const TodoAddPage(),
       },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/detail') {
-          final args = settings.arguments as TodoDetailArguments;
-          return MaterialPageRoute(builder: (context) {
-            return TodoDetailPage(
-              index: args.index,
-              todoItem: args.todoItem,
-              toggleIsCompleted: args.toggleIsCompleted,
-            );
-          });
-        }
-      },
+      // onGenerateRoute: (settings) {
+      //   if (settings.name == '/detail') {
+      //     final args = settings.arguments as TodoDetailArguments;
+      //     return MaterialPageRoute(
+      //       builder: (context) {
+      //         return TodoDetailPage(
+      //           index: args.index,
+      //           todoItem: args.todoItem,
+      //           toggleIsCompleted: args.toggleIsCompleted,
+      //         );
+      //       },
+      //     );
+      //   }
+      // },
     );
   }
 }
