@@ -13,8 +13,8 @@ class TodoListPage extends StatefulWidget {
 class TodoListPageState extends State {
   int bottomBarIndex = 0; // 選択されたタブを管理するための変数
   List<TodoItem> get shownList =>
-      bottomBarIndex == 0 ? _unCompletedList : _completedList;
-  final List<TodoItem> _unCompletedList = [
+      bottomBarIndex == 0 ? unCompletedList : completedList;
+  final List<TodoItem> unCompletedList = [
     TodoItem(
       id: 0,
       title: 'Flutter',
@@ -29,7 +29,7 @@ class TodoListPageState extends State {
     ),
   ];
 
-  final List<TodoItem> _completedList = [
+  final List<TodoItem> completedList = [
     TodoItem(
       id: 2,
       title: '課題',
@@ -52,9 +52,9 @@ class TodoListPageState extends State {
       () {
         final tappedItem = shownList[index];
         final removeFrom =
-            tappedItem.isCompleted ? _completedList : _unCompletedList;
+            tappedItem.isCompleted ? completedList : unCompletedList;
         final addTo =
-            tappedItem.isCompleted ? _unCompletedList : _completedList;
+            tappedItem.isCompleted ? unCompletedList : completedList;
         addTo.add(tappedItem..toggleIsCompleted());
         removeFrom.removeAt(index);
       },
@@ -64,9 +64,9 @@ class TodoListPageState extends State {
   void addTodoItem(Map<String, String> formValue) {
     setState(
       () {
-        _unCompletedList.add(
+        unCompletedList.add(
           TodoItem(
-            id: _unCompletedList.length + _completedList.length,
+            id: unCompletedList.length + completedList.length,
             title: formValue['title']!,
             content: formValue['content']!,
             isCompleted: false,
@@ -96,7 +96,7 @@ class TodoListPageState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'ToDo 一覧（完了済み ${_completedList.length} / ${_unCompletedList.length + _completedList.length}）'),
+            'ToDo 一覧（完了済み ${completedList.length} / ${unCompletedList.length + completedList.length}）'),
       ),
       body: Center(
         child: ListView.builder(
