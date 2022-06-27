@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_sample_app/todo_list.dart';
 
-class TodoAddPage extends StatefulWidget {
+class TodoAddPage extends ConsumerStatefulWidget {
   const TodoAddPage({Key? key}) : super(key: key);
 
   @override
-  TodoAddPageState createState() => TodoAddPageState();
+  ConsumerState<TodoAddPage> createState() => _TodoAddPageState();
 }
 
-class TodoAddPageState extends State<TodoAddPage> {
+class _TodoAddPageState extends ConsumerState<TodoAddPage> {
   final formKey = GlobalKey<FormState>();
   Map<String, String> formValue = {};
 
   @override
   Widget build(BuildContext context) {
-    final addTodoItem = ModalRoute.of(context)!.settings.arguments! as Function;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +56,6 @@ class TodoAddPageState extends State<TodoAddPage> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: '内容',
-                    // labelTextを上寄せにする
                     alignLabelWithHint: true,
                   ),
                   keyboardType: TextInputType.multiline,
@@ -79,7 +78,7 @@ class TodoAddPageState extends State<TodoAddPage> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       formKey.currentState?.save();
-                      addTodoItem(formValue);
+                      ref.read(todoProvider).addTodoItem(formValue);
                       Navigator.of(context).pop();
                     }
                   },
